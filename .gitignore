@@ -21,6 +21,7 @@ screenlog.3
 !.vim*
 !.vim/*
 !.oh-my-zsh*
+!.oh-my-zsh/*
 !.gitignore
 !.bashrc
 !.zshrc
