@@ -20,9 +20,11 @@ screenlog.3
 .*
 !.vim*
 !.vim/*
+!.oh-my-zsh*
 !.gitignore
 !.bashrc
-!.zhshrc
+!.zshrc
+!.ctags
 !.htoprc
 !.netrc
 !.screenrc
