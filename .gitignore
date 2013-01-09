@@ -1,0 +1,7 @@
+*
+!.gitignore
+!.bashrc
+!.zshrc
+!.ctags
+!.vimrc
+!.tmux.conf
