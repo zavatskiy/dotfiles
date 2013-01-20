@@ -20,6 +20,8 @@ Bundle 'scrooloose/nerdcommenter.git'
 Bundle 'ervandew/supertab'
 Bundle 'nvie/vim-flake8'
 Bundle 'jmcantrell/vim-virtualenv'
+Bundle 'taq/vim-git-branch-info'
+Bundle 'motemen/git-vim'
 
 " vim-scripts repos
 Bundle 'L9'
@@ -202,7 +204,7 @@ map <C-F12> :vertical resize +10<CR>
 " Statusline Format
 set statusline=
 set statusline+=\ %f\ 
-set statusline+=%r%m[buf=%n]%y[ff=%{&fileformat}][fenc=%{&fileencoding}][enc=%{&encoding}]
+set statusline+=%r%m%{GitBranchInfoString()}[buf=%n]%y[ff=%{&fileformat}][fenc=%{&fileencoding}][enc=%{&encoding}]
 set statusline+=%<\ %{strftime(\"%A,\ %d.%m.%y\ %R\",getftime(expand(\"%:p\")))}
 set statusline+=%k%=%-25.(ASCII=\%03.3b\ HEX=\%02.2B\ line=%l\(%L\),col=%v%)\ 
 set statusline+=%P\ 
@@ -225,6 +227,11 @@ vmap <C-C> "+yi
 imap <C-V> <esc>"+gPi
 
 "" Plugins
+
+" Git status
+"let g:git_branch_status_head_current=1
+let g:git_branch_status_text=""
+"let g:git_branch_status_ignore_remotes=1
 
 " TagBar
 let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
