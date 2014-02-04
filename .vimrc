@@ -11,21 +11,22 @@ Bundle 'gmarik/vundle'
 " My Bundles here:
 "
 " original repos on github
-"Bundle 'tpope/vim-fugitive'
-"Bundle 'Lokaltog/vim-easymotion'
-"Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-"Bundle 'tpope/vim-rails.git'
 Bundle 'jmcantrell/vim-virtualenv'
 Bundle 'scrooloose/nerdcommenter.git'
 Bundle 'ervandew/supertab'
 Bundle 'nvie/vim-flake8'
-Bundle 'jmcantrell/vim-virtualenv'
 Bundle 'taq/vim-git-branch-info'
 Bundle 'motemen/git-vim'
+Bundle 'vim-scripts/TaskList.vim'
+Bundle 'klen/python-mode'
+Bundle 'sjl/gundo.vim'
+Bundle 'fholgado/minibufexpl.vim'
+Bundle 'kien/ctrlp.vim'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'mileszs/ack.vim'
+Bundle 'miripiruni/CSScomb-for-Vim.git'
 
 " vim-scripts repos
-Bundle 'L9'
-Bundle 'FuzzyFinder'
 Bundle 'DfrankUtil'
 Bundle 'vimprj'
 Bundle 'indexer.tar.gz'
@@ -34,7 +35,6 @@ Bundle 'SudoEdit.vim'
 Bundle 'matchit.zip'
 Bundle 'bufexplorer.zip'
 Bundle 'project.tar.gz'
-Bundle 'minibufexpl.vim'
 Bundle 'jsbeautify'
 Bundle 'grep.vim'
 Bundle 'ZenCoding.vim'
@@ -50,7 +50,7 @@ Bundle 'ZenCoding.vim'
 set nocp
 
 " Nopaste
-set nopaste
+set paste
 
 " Показывать положение курсора всё время.
 set ruler
@@ -98,8 +98,10 @@ set ignorecase
 set lz
 
 " Invisible Char's
-set listchars=tab:·\·
-set list
+if has('multi_byte')
+    set listchars=tab:»\ ,trail:·,eol:¶,extends:→,precedes:←,nbsp:×
+endif
+nmap <leader>l :set list!<CR>
 
 " Создание бэкапов
 set backup
@@ -150,7 +152,7 @@ set expandtab
 " Размер табуляции по умолчанию
 set shiftwidth=4
 set softtabstop=4
-set tabstop=8
+set tabstop=4
 set smarttab
 
 " Отспупы в стиле C
@@ -160,7 +162,14 @@ set cin
 syntax on
 
 " Цветовая гамма
-colorscheme desertEx
+"colorscheme desertEx
+colorscheme solarized
+"if has('gui_running')
+set background=dark
+"else
+    "set background=light
+"endif
+
 
 " allow to use backspace instead of "x"
 set backspace=indent,eol,start whichwrap+=<,>,[,]
@@ -236,18 +245,22 @@ let g:git_branch_status_text=""
 " TagBar
 let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
 let g:tagbar_autofocus = 1
+let g:tagbar_autoclose = 1
 let g:tagbar_autoshowtag = 1
 let g:tagbar_width = 30
+let g:tagbar_sort = 0
 
 " Matchit
 let loaded_matchit = 1
 
 " Project
 let g:proj_window_increment = 30
+let g:proj_flags = "imstc"
 
 "let g:indexer_disableCtagsWarning=1
 "let g:indexer_enableWhenProjectDirFound=0
-let g:indexer_ctagsCommandLineOptions="--c++-kinds=+p+l --fields=+iaS --extra=+q"
+"let g:indexer_ctagsCommandLineOptions="--c++-kinds=+p+l --fields=+iaS --extra=+q"
+
 
 " Wild Menu
 set wildmenu
@@ -315,7 +328,7 @@ au BufRead python set smartindent cinwords=if,elif,else,for,while,try,except,fin
 au BufWritePre python normal m`:%s/\s\+$//e ``
 au BufRead,BufNewFile *.py syntax match Search /\%<84v.\%>80v/
 au BufRead,BufNewFile *.py syntax match ErrorMsg /\%>83v.\+/
-au BufWritePost *.py call Flake8()
+"au BufWritePost *.py call Flake8()
 "au BufWinEnter *.py let w:m1=matchadd('Search', '\%>80v.\+', -1)
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>79v.\+', -1)
 
@@ -383,7 +396,7 @@ au FileType python set keywordprg=pydoc
 "let g:pydiction_location = '~/.vim/ftplugin/pydiction/complete-dict'
 
 
-let s:PathToExecutable = '/opt/local/bin/python'
+let s:PathToExecutable = '/usr/local/bin/python'
 
 " Python settings
 let python_highlight_all = 1
@@ -395,19 +408,29 @@ let Grep_Find_Use_Xargs = 0
 "let g:pep8_map='<c-8>'
 
 " Snippet's
- 
+
 imap {<CR> {<CR>}<Esc>0
-iabbrev ,d var_export( );<esc>3ha
+iabbrev ,d import ipdb<cr>ipdb.set_trace()<esc>
 iabbrev ,c console.log( );<esc>3ha
 iabbrev ,l log.debug( );<esc>3ha
-iabbrev todo /* TODO <Esc>mai */<Esc>`ai
-iabbrev fixme /* FIXME <Esc>mai */<Esc>`ai
+iabbrev todo # TODO: <Esc>mai<Esc>`ai
+iabbrev fixme # FIXME: <Esc>mai<Esc>`ai
 vnoremap _gt "zdi{{ _('<C-R>z') }}<ESC>
 
 " Netrw
 let g:netrw_liststyle=1
 
-" Хз
+" Rope
+let g:pymode_lint = 1
+let g:pymode_lint_on_write = 1
+"let g:pymode_lint_message = 1
+let g:pymode_lint_checkers = ['pyflakes', 'pep8']
+let g:pymode_lint_ignore = "E712"
+"let g:pymode_rope_vim_completion = 0
+let g:pymode_rope_autocomplete_map = '<M-Space>'
+"let g:pymode_breakpoint_key = '<leader>i'
+"let g:pymode_breakpoint = 0
+imap <S-Tab> <Plug>SuperTabBackward
 
 " Bufexplorer
 let g:bufExplorerSortBy='fullpath'
@@ -420,8 +443,12 @@ nmap ,v :e ~/.vimrc
 " MinibuffExplorer
 let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplModSelTarget = 1
-let g:miniBufExplSplitToEdge = 1
-map <Leader>b :TMiniBufExplorer<cr>
+map ,b :MiniBufExplorer<cr>
+
+"CtrlP
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = {'dir':  '\v[\/]\.(git|hg|svn)$', 'file': '\v\.(pyc|exe|so|dll)$'}
 
 
 " Tasklist
@@ -430,12 +457,6 @@ let g:tlRememberPosition = 1
 
 " CSS in html
 let html_use_css = 1
-
-" Поиск и замена слова под курсором
-nmap ;s :%s/\<<c-r>=expand("<cword>")<cr>\>/
-
-" Debug world under cursor
-nmap ;d byeodbg<esc>p
 
 "Zen codding
 let g:user_zen_expandabbr_key = '<c-z>'
@@ -460,29 +481,6 @@ let g:use_zen_complete_tag = 1
             "\}
 
 
-python << EOF
-import vim
-import re
-
-ipdb_breakpoint = 'import ipdb; ipdb.set_trace()'
-
-def set_breakpoint():
-    breakpoint_line = int(vim.eval('line(".")')) - 1
-
-    current_line = vim.current.line
-    white_spaces = re.search('^(\s*)', current_line).group(1)
-    vim.current.buffer.append(white_spaces + ipdb_breakpoint, breakpoint_line)
-
-vim.command('map <f6> :py set_breakpoint()<cr>')
-
-def remove_breakpoints():
-    op = 'g/^.*%s.*/d' % ipdb_breakpoint
-    vim.command(op)
-
-vim.command('map <f7> :py remove_breakpoints()<cr>')
-EOF
-
-
 " F1-F19 key's
 
 " F1 - Empty Search
@@ -504,6 +502,11 @@ nmap <silent> <F4> <Plug>ToggleProject
 map <F5> :Ex<cr>
 vmap <F5> <esc>:Ex<cr>gv
 imap <F5> <esc>:Ex<cr>i
+
+" F6 - FileExplorer
+map <F6> :GundoToggle<cr>
+vmap <F6> <esc>:GundoToggle<cr>gv
+imap <F6> <esc>:GundoToggle<cr>i
 
 " F8 - List Buffer's
 map <F8> <Esc>:BufExplorer<cr>
